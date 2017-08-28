@@ -1,19 +1,18 @@
 package co.edu.javeriana.bikewars;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainView extends AppCompatActivity {
+public class SelectionView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_view);
+        setContentView(R.layout.activity_selection_view);
     }
 
-    public void configLaunch(View view){
-        startActivity(new Intent(this, ConfigView.class));
+    public void select(View view){
+        finish();
     }
 }

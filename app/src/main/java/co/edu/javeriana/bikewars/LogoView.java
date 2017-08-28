@@ -1,6 +1,8 @@
 package co.edu.javeriana.bikewars;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ public class LogoView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo_view);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.v("Logger", "hola");
         new Timer().schedule(new TimerTask() {
             @Override
@@ -21,7 +24,7 @@ public class LogoView extends AppCompatActivity {
                 Log.v("Logger", "Si entro");
                 lanzarApp();
             }
-        }, 2000);
+        }, Integer.parseInt(preferences.getString("logoTime", "2000")));
     }
     public void lanzarApp(){
         Intent intent = new Intent(this, LoginView.class);

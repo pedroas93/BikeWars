@@ -23,7 +23,15 @@
         </activity>
         <activity android:name=".LoginView" />
         <activity android:name=".NewUserView" />
-        <activity android:name=".MainView"></activity>
+        <activity android:name=".MainView" />
+        <activity android:name=".ConfigView" />
+        <activity android:name=".ProfileView" />
+        <activity android:name=".RouteLobbyView" />
+        <activity android:name=".NewRouteView" />
+        <activity android:name=".SelectionView" />
+        <activity android:name=".HistoricView" />
+        <activity android:name=".SearchView" />
+        <activity android:name=".ShareView"></activity>
     </application>
 
 </manifest>
