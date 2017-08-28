@@ -5,20 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class ShareView extends AppCompatActivity {
+public class FriendsView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share_view);
+        setContentView(R.layout.activity_friends_view);
     }
 
-    public void mainLaunch(View view){
-        startActivity(new Intent(this, MainView.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
-
-    public void newGroupLaunch(View view){
+    public void newGroup(View view){
         startActivity(new Intent(this, NewGroupView.class));
     }
 
+    public void searchFriends(View view){
+
+    }
 }

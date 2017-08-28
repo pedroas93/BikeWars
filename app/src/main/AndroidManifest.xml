@@ -31,7 +31,11 @@
         <activity android:name=".SelectionView" />
         <activity android:name=".HistoricView" />
         <activity android:name=".SearchView" />
-        <activity android:name=".ShareView"></activity>
+        <activity android:name=".ShareView" />
+        <activity android:name=".FriendsView" />
+        <activity android:name=".NewGroupView" />
+        <activity android:name=".SearchFriendsView" />
+        <activity android:name=".ChatView"></activity>
     </application>
 
 </manifest>

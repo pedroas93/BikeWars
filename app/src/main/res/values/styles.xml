@@ -28,4 +28,19 @@
         <item name="android:layout_height">20dp</item>
     </style>
 
+    <style name="FriendList">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/back</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <style name="BackColor">
+        <item name="android:background">#4682b4</item>
+    </style>
+
 </resources>
