@@ -22,6 +22,6 @@ public class NewRouteView extends AppCompatActivity {
     }
 
     public void shareLaunch(View view){
-
+        startActivity(new Intent(this, ShareView.class));
     }
 }

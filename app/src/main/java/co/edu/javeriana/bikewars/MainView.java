@@ -16,4 +16,12 @@ public class MainView extends AppCompatActivity {
     public void configLaunch(View view){
         startActivity(new Intent(this, ConfigView.class));
     }
+
+    public void friendsLaunch(View view){
+        startActivity(new Intent(this, FriendsView.class));
+    }
+
+    public void routeLaunch(View view){
+        startActivity(new Intent(this, RouteLobbyView.class));
+    }
 }

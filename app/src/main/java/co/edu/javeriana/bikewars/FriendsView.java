@@ -18,6 +18,6 @@ public class FriendsView extends AppCompatActivity {
     }
 
     public void searchFriends(View view){
-
+        startActivity(new Intent(this, SearchFriendsView.class));
     }
 }

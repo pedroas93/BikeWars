@@ -21,4 +21,8 @@ public class LoginView extends AppCompatActivity {
         Intent intent = new Intent(this, MainView.class);
         startActivity(intent);
     }
+
+    public void newUserLaunch(View view){
+        startActivity(new Intent(this, NewUserView.class));
+    }
 }
