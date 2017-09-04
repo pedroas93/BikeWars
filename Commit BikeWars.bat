@@ -1,4 +1,4 @@
 git add --all
-git commit -m "Navegacion completa"
+git commit -m "Vistas actualizadas conectadas y componente propio agregado."
 git push
 pause

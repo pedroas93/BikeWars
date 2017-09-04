@@ -93,15 +93,15 @@
             android:text="Compartir" />
     </LinearLayout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView2"
+    <fragment
+        android:id="@+id/newRouteMap"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_red_dark"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

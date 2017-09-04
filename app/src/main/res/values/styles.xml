@@ -40,7 +40,7 @@
     </style>
 
     <style name="BackColor">
-        <item name="android:background">#4682b4</item>
+        <item name="android:background">#ffffff</item>
     </style>
 
 </resources>

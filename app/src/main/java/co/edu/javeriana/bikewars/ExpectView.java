@@ -1,9 +1,10 @@
 package co.edu.javeriana.bikewars;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,26 +13,34 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ShareView extends AppCompatActivity implements OnMapReadyCallback {
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExpectView extends AppCompatActivity implements OnMapReadyCallback {
+
+    List<String> top;
+    ListView list;
+    TextView banner;
     MapFragment mapFragment;
     GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share_view);
+        setContentView(R.layout.activity_expect_view);
         mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.shareMap);
+                .findFragmentById(R.id.expectMap);
         mapFragment.getMapAsync(this);
-    }
-
-    public void mainLaunch(View view){
-        startActivity(new Intent(this, MainView.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
-
-    public void newGroupLaunch(View view){
-        startActivity(new Intent(this, NewGroupView.class));
+        banner = (TextView) findViewById(R.id.expectBanner);
+        banner.setText(getIntent().getStringExtra("name"));
+        top = new ArrayList<>();
+        top.add("Daniela");
+        top.add("Sebastian");
+        top.add("David");
+        list = (ListView) findViewById(R.id.expectTopList);
+        list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, top));
     }
 
     @Override
@@ -44,5 +53,4 @@ public class ShareView extends AppCompatActivity implements OnMapReadyCallback {
                 .title("Marker"));
         map.setIndoorEnabled(false);
     }
-
 }
