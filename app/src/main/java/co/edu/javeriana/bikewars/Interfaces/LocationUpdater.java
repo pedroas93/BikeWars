@@ -1,6 +1,8 @@
 package co.edu.javeriana.bikewars.Interfaces;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 import co.edu.javeriana.bikewars.Logic.Ruta;
 
@@ -9,6 +11,5 @@ import co.edu.javeriana.bikewars.Logic.Ruta;
  */
 
 public interface LocationUpdater {
-    void updateLocation(LatLng location);
-    void updateRoute(Ruta route);
+    void updateLocation(MarkerOptions location, List<MarkerOptions> markers, Ruta route);
 }

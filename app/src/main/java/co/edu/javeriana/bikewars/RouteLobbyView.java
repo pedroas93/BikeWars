@@ -1,5 +1,6 @@
 package co.edu.javeriana.bikewars;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
 import co.edu.javeriana.bikewars.Logic.MapData;
@@ -24,15 +24,17 @@ import co.edu.javeriana.bikewars.Logic.Ruta;
 
 public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallback, LocationUpdater{
 
-    MapFragment mapFragment;
-    GoogleMap map;
-    Marker ubicacion = null, salida=null, llegada=null;
-    Polyline route = null;
+    //Static Context
+    public static Context context;
+
+    private MapFragment mapFragment;
+    private GoogleMap map;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getBaseContext();
         setContentView(R.layout.activity_route_lobby_view);
         mAuth = FirebaseAuth.getInstance();
         mapFragment = (MapFragment) getFragmentManager()
@@ -63,44 +65,14 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MapData.getInstance(getBaseContext()).unSuscribe(this);
+        MapData.getInstance().unSuscribe(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        MapData data = MapData.getInstance(getBaseContext());
-        for(MarkerOptions mark: data.getMarkers()){
-            googleMap.addMarker(mark);
-        }
-        MapData.getInstance(getBaseContext()).addListener(this);
-    }
-
-    @Override
-    public void updateLocation(LatLng location) {
-        if(ubicacion!=null){
-            ubicacion.remove();
-            ubicacion = map.addMarker(new MarkerOptions().position(location).title("Ubicacion"));
-        }else {
-            ubicacion = map.addMarker(new MarkerOptions().position(location).title("Ubicacion"));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-        }
-    }
-
-    @Override
-    public void updateRoute(Ruta route) {
-        if(this.salida!=null){
-            this.salida.remove();
-        }
-        if(this.llegada!=null){
-            this.llegada.remove();
-        }
-        if(this.route!=null){
-            this.route.remove();
-        }
-        this.salida = map.addMarker(route.getSalida());
-        this.llegada = map.addMarker(route.getLlegada());
-        this.route = map.addPolyline(route.getRuta());
+        MapData.getInstance().addListener(this);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(MapData.bogotaMark, 10));
     }
 
     @Override
@@ -123,6 +95,22 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void updateLocation(MarkerOptions location, List<MarkerOptions> markers, Ruta route) {
+        map.clear();
+        if(location!=null){
+            map.addMarker(location);
+        }
+        if(route!=null){
+            map.addPolyline(route.getRuta());
+            map.addMarker(route.getSalida());
+            map.addMarker(route.getLlegada());
+        }
+        for(MarkerOptions mark: markers){
+            map.addMarker(mark);
         }
     }
 }

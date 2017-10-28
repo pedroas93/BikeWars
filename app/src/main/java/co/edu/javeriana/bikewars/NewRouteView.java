@@ -59,7 +59,7 @@ public class NewRouteView extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void mainLaunch(View view){
-        MapData.getInstance(getBaseContext()).setRoute(new Ruta(salidaMarker, llegadaMarker, poli));
+        MapData.getInstance().setRoute(new Ruta(salidaMarker, llegadaMarker, poli));
         finish();
     }
 

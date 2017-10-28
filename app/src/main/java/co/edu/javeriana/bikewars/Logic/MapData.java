@@ -1,6 +1,5 @@
 package co.edu.javeriana.bikewars.Logic;
 
-import android.content.Context;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationRequest;
@@ -8,11 +7,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
+import co.edu.javeriana.bikewars.RouteLobbyView;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
@@ -22,31 +24,39 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
  */
 
 public class MapData{
+    //Aux
     private static MapData instance = null;
+    public static final LatLng bogotaMark = new LatLng(4.624335, -74.063644);
     private static ReactiveLocationProvider provider;
     private static Disposable subscription;
-    private Context context;
-    private LatLng ubication;
+
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
+    //Attributes
+    private MarkerOptions ubication;
     private List<MarkerOptions> markers;
     private List<LocationUpdater> listeners;
     private Ruta route;
 
-    private MapData(Context context) {
-        ubication = new LatLng(4.624335, -74.063644);
-        this.context = context;
+    private MapData() {
+        ubication = new MarkerOptions();
         markers = new ArrayList<>();
         listeners = new ArrayList<>();
-        provider = new ReactiveLocationProvider(context);
+        provider = new ReactiveLocationProvider(RouteLobbyView.context);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
     }
 
-    public static MapData getInstance(Context context){
+    public static MapData getInstance(){
         if(instance==null){
-            instance = new MapData(context);
+            instance = new MapData();
         }
         return instance;
     }
 
-    public LatLng getUbication(){
+    public MarkerOptions getUbication(){
         synchronized (ubication){
             return ubication;
         }
@@ -72,7 +82,7 @@ public class MapData{
                     @Override
                     public void accept(Location location) throws Exception {
                         synchronized (ubication){
-                            ubication = new LatLng(location.getLatitude(), location.getLongitude());
+                            ubication = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(mUser.getDisplayName());
                         }
                         updateListeners();
                     }
@@ -97,7 +107,7 @@ public class MapData{
         synchronized (listeners){
                 for(LocationUpdater listener: listeners){
                     synchronized (ubication){
-                        listener.updateLocation(ubication);
+                        listener.updateLocation(ubication, markers, route);
                     }
                 }
         }
@@ -105,20 +115,6 @@ public class MapData{
 
     public void setRoute(Ruta route){
         this.route = route;
-        updateRoute();
-    }
-
-    public Ruta getRoute() {
-        return route;
-    }
-
-    private void updateRoute(){
-        synchronized (listeners){
-            for(LocationUpdater listener: listeners){
-                synchronized (route){
-                    listener.updateRoute(route);
-                }
-            }
-        }
+        updateListeners();
     }
 }
