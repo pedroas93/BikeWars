@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/RecorridosBtn"
+                android:id="@+id/mainRecorridosBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -48,7 +48,7 @@
                 tools:layout_editor_absoluteY="108dp" />
 
             <Button
-                android:id="@+id/AmigosBtn"
+                android:id="@+id/mainAmigosBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/raceBtn"
+            android:id="@+id/mainRaceBtn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"

@@ -9,12 +9,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainView extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void friendsLaunch(View view){
@@ -39,11 +44,18 @@ public class MainView extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.configMenuItem:
-                startActivity(new Intent(this, ConfigView.class));
+            case R.id.mainMenuLogout:
+                mAuth.signOut();
+                startActivity(new Intent(getBaseContext(), LoginView.class));
+                finish();
+                return true;
+            case R.id.mainMenuConfig:
+                // TODO: 27/10/2017 Lanzamiento de configuracion.
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }
