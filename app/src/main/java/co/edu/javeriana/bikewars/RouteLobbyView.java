@@ -1,9 +1,8 @@
 package co.edu.javeriana.bikewars;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,21 +11,23 @@ import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 
 import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
 import co.edu.javeriana.bikewars.Logic.MapData;
+import co.edu.javeriana.bikewars.Logic.Ruta;
 
 public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallback, LocationUpdater{
 
     MapFragment mapFragment;
     GoogleMap map;
-    Marker ubicacion = null;
+    Marker ubicacion = null, salida=null, llegada=null;
+    Polyline route = null;
     private FirebaseAuth mAuth;
 
     @Override
@@ -60,8 +61,8 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         MapData.getInstance(getBaseContext()).unSuscribe(this);
     }
 
@@ -84,6 +85,22 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
             ubicacion = map.addMarker(new MarkerOptions().position(location).title("Ubicacion"));
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
         }
+    }
+
+    @Override
+    public void updateRoute(Ruta route) {
+        if(this.salida!=null){
+            this.salida.remove();
+        }
+        if(this.llegada!=null){
+            this.llegada.remove();
+        }
+        if(this.route!=null){
+            this.route.remove();
+        }
+        this.salida = map.addMarker(route.getSalida());
+        this.llegada = map.addMarker(route.getLlegada());
+        this.route = map.addPolyline(route.getRuta());
     }
 
     @Override

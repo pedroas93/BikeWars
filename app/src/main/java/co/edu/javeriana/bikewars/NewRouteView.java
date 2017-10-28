@@ -3,14 +3,13 @@ package co.edu.javeriana.bikewars;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
@@ -27,12 +26,17 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import co.edu.javeriana.bikewars.Logic.MapData;
+import co.edu.javeriana.bikewars.Logic.Ruta;
+
 public class NewRouteView extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapFragment mapFragment;
     private GoogleMap map;
     private Address salida, llegada;
+    private MarkerOptions salidaMarker, llegadaMarker;
     private Marker salidaMark, llegadaMark;
+    private PolylineOptions poli;
     private Polyline poliRuta;
     private Button salidaBtn, llegadaBtn;
 
@@ -55,7 +59,8 @@ public class NewRouteView extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void mainLaunch(View view){
-        startActivity(new Intent(this, MainView.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        MapData.getInstance(getBaseContext()).setRoute(new Ruta(salidaMarker, llegadaMarker, poli));
+        finish();
     }
 
     public void shareLaunch(View view){
@@ -82,7 +87,8 @@ public class NewRouteView extends AppCompatActivity implements OnMapReadyCallbac
                     }
                     salida = (Address)data.getExtras().get("endPoint");
                     salidaBtn.setText(salida.getFeatureName());
-                    salidaMark = map.addMarker(new MarkerOptions().position(new LatLng(salida.getLatitude(), salida.getLongitude())).title(salida.getFeatureName()));
+                    salidaMarker = new MarkerOptions().position(new LatLng(salida.getLatitude(), salida.getLongitude())).title(salida.getFeatureName());
+                    salidaMark = map.addMarker(salidaMarker);
                     if(llegada!=null){
                         trazarRuta(new LatLng(salida.getLatitude(), salida.getLongitude()), new LatLng(llegada.getLatitude(), llegada.getLongitude()));
                     }
@@ -97,7 +103,8 @@ public class NewRouteView extends AppCompatActivity implements OnMapReadyCallbac
                     }
                     llegada = (Address)data.getExtras().get("endPoint");
                     llegadaBtn.setText(llegada.getFeatureName());
-                    llegadaMark = map.addMarker(new MarkerOptions().position(new LatLng(llegada.getLatitude(), llegada.getLongitude())).title(llegada.getFeatureName()));
+                    llegadaMarker = new MarkerOptions().position(new LatLng(llegada.getLatitude(), llegada.getLongitude())).title(llegada.getFeatureName());
+                    llegadaMark = map.addMarker(llegadaMarker);
                     if(salida!=null){
                         trazarRuta(new LatLng(salida.getLatitude(), salida.getLongitude()), new LatLng(llegada.getLatitude(), llegada.getLongitude()));
                     }
@@ -134,6 +141,7 @@ public class NewRouteView extends AppCompatActivity implements OnMapReadyCallbac
                         poly.color(Color.argb(255,171, 85, 251));
                         poly.width(10);
                         poly.addAll(route.getPoints());
+                        poli=poly;
                         poliRuta = map.addPolyline(poly);
                         Toast.makeText(getBaseContext(), "La distancia es de: " + route.getDistanceText(), Toast.LENGTH_SHORT).show();
                     }

@@ -2,7 +2,6 @@ package co.edu.javeriana.bikewars.Logic;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
@@ -31,6 +29,7 @@ public class MapData{
     private LatLng ubication;
     private List<MarkerOptions> markers;
     private List<LocationUpdater> listeners;
+    private Ruta route;
 
     private MapData(Context context) {
         ubication = new LatLng(4.624335, -74.063644);
@@ -88,20 +87,38 @@ public class MapData{
     public void unSuscribe(LocationUpdater client){
         synchronized (listeners){
             listeners.remove(client);
-            if(listeners.isEmpty()){
+            if(listeners.isEmpty() && subscription != null){
                 subscription.dispose();
             }
         }
     }
 
-    public void updateListeners(){
-        Log.i("Actualizando", "Ubicacion actualizada");
+    private void updateListeners(){
         synchronized (listeners){
                 for(LocationUpdater listener: listeners){
                     synchronized (ubication){
                         listener.updateLocation(ubication);
                     }
                 }
+        }
+    }
+
+    public void setRoute(Ruta route){
+        this.route = route;
+        updateRoute();
+    }
+
+    public Ruta getRoute() {
+        return route;
+    }
+
+    private void updateRoute(){
+        synchronized (listeners){
+            for(LocationUpdater listener: listeners){
+                synchronized (route){
+                    listener.updateRoute(route);
+                }
+            }
         }
     }
 }
