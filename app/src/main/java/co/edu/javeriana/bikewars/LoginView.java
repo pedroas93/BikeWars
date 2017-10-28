@@ -35,7 +35,7 @@ public class LoginView extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null){
-                    startActivity(new Intent(getBaseContext(), MainView.class));
+                    startActivity(new Intent(getBaseContext(), RouteLobbyView.class));
                     finish();
                 }
             }
