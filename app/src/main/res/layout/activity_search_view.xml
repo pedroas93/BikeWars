@@ -52,7 +52,7 @@
     </TableLayout>
 
     <ListView
-        android:id="@+id/ResultList"
+        android:id="@+id/selectionResultList"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:layout_marginLeft="8dp"
@@ -72,14 +72,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/SaveBtn"
+        app:layout_constraintBottom_toTopOf="@+id/selectionSelectBtn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ResultList"
+        app:layout_constraintTop_toBottomOf="@+id/selectionResultList"
         app:layout_constraintVertical_bias="0.505" />
 
     <Button
-        android:id="@+id/SaveBtn"
+        android:id="@+id/selectionSelectBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
