@@ -46,9 +46,9 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop(){
         super.onStop();
-
+        MapData.getInstance(getBaseContext()).unSuscribe(this);
     }
 
     @Override
