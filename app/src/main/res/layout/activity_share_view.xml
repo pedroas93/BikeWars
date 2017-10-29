@@ -31,7 +31,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Placeholder de la ruta"
+        android:text="Placeholder de la route"
         android:textAlignment="textEnd"
         android:textColor="@android:color/black"
         app:layout_constraintLeft_toLeftOf="parent"

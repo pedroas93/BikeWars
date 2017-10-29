@@ -1,43 +1,32 @@
 package co.edu.javeriana.bikewars;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ListView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class SearchView extends AppCompatActivity implements OnMapReadyCallback {
+import co.edu.javeriana.bikewars.Logic.UserData;
 
-    MapFragment mapFragment;
-    GoogleMap map;
+public class SearchView extends AppCompatActivity {
+
+    ListView resultados;
+    FirebaseDatabase db;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_view);
-        mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.searchMap);
-        mapFragment.getMapAsync(this);
+        resultados = (ListView) findViewById(R.id.searchResultList);
+        db = FirebaseDatabase.getInstance();
+        ref = db.getReference(UserData.routesRoot);
     }
 
     public void mainLaunch(View view){
         startActivity(new Intent(this, MainView.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        this.map = map;
-        LatLng ubicacion = new LatLng(4.6275604, -74.0640883);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
-        map.addMarker(new MarkerOptions()
-                .position(ubicacion)
-                .title("Marker"));
-        map.setIndoorEnabled(false);
     }
 }

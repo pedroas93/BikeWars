@@ -13,16 +13,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
-import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
+import co.edu.javeriana.bikewars.Interfaces.LocationListener;
 import co.edu.javeriana.bikewars.Logic.MapData;
-import co.edu.javeriana.bikewars.Logic.Ruta;
+import co.edu.javeriana.bikewars.Logic.Route;
 
-public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallback, LocationUpdater{
+public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     //Static Context
     public static Context context;
@@ -30,6 +31,7 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
     private MapFragment mapFragment;
     private GoogleMap map;
     private FirebaseAuth mAuth;
+    private Marker ubication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,15 +101,18 @@ public class RouteLobbyView extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void updateLocation(MarkerOptions location, List<MarkerOptions> markers, Ruta route) {
+    public void updateLocation(MarkerOptions location, List<MarkerOptions> markers, Route route) {
         map.clear();
         if(location!=null){
-            map.addMarker(location);
+            if(ubication==null){
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(location.getPosition(), 15));
+            }
+            ubication = map.addMarker(location);
         }
         if(route!=null){
-            map.addPolyline(route.getRuta());
-            map.addMarker(route.getSalida());
-            map.addMarker(route.getLlegada());
+            map.addPolyline(route.getRoute());
+            map.addMarker(route.getStart());
+            map.addMarker(route.getEnd());
         }
         for(MarkerOptions mark: markers){
             map.addMarker(mark);

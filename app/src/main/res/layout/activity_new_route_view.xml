@@ -23,7 +23,7 @@
         android:id="@+id/linearLayout9">
 
         <EditText
-            android:id="@+id/NameTxt"
+            android:id="@+id/newRouteName"
             style="@style/OptionText"
             android:hint="Nombre Ruta"
             android:inputType="textPersonName"

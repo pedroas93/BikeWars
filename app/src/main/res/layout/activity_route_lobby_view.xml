@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="searchRouteLaunch"
                     android:src="@drawable/ic_search_black_24dp"
-                    app:fab_label="Buscar ruta"
+                    app:fab_label="Buscar route"
                     app:fab_size="mini" />
 
                 <com.github.clans.fab.FloatingActionButton
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="newRouteLaunch"
                     android:src="@drawable/ic_add_circle"
-                    app:fab_label="Nueva ruta"
+                    app:fab_label="Nueva route"
                     app:fab_size="mini" />
 
                 <com.github.clans.fab.FloatingActionButton

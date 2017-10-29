@@ -13,7 +13,9 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.edu.javeriana.bikewars.Interfaces.LocationUpdater;
+import co.edu.javeriana.bikewars.Interfaces.LocationListener;
+import co.edu.javeriana.bikewars.Interfaces.ObservableListener;
+import co.edu.javeriana.bikewars.Logic.Entities.dbObservable;
 import co.edu.javeriana.bikewars.RouteLobbyView;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -23,7 +25,7 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
  * Created by jairo on 28/10/17.
  */
 
-public class MapData{
+public class MapData implements ObservableListener{
     //Aux
     private static MapData instance = null;
     public static final LatLng bogotaMark = new LatLng(4.624335, -74.063644);
@@ -35,13 +37,12 @@ public class MapData{
     private FirebaseUser mUser;
 
     //Attributes
-    private MarkerOptions ubication;
+    private dbObservable ubication;
     private List<MarkerOptions> markers;
-    private List<LocationUpdater> listeners;
-    private Ruta route;
+    private List<LocationListener> listeners;
+    private Route route;
 
     private MapData() {
-        ubication = new MarkerOptions();
         markers = new ArrayList<>();
         listeners = new ArrayList<>();
         provider = new ReactiveLocationProvider(RouteLobbyView.context);
@@ -56,7 +57,7 @@ public class MapData{
         return instance;
     }
 
-    public MarkerOptions getUbication(){
+    public dbObservable getUbication(){
         synchronized (ubication){
             return ubication;
         }
@@ -71,7 +72,7 @@ public class MapData{
         return markers;
     }
 
-    public void addListener(LocationUpdater listener){
+    public void addListener(LocationListener listener){
         synchronized (listeners){
             if(listeners.isEmpty()){
                 LocationRequest mLocationRequest = new LocationRequest();
@@ -81,9 +82,13 @@ public class MapData{
                 subscription = provider.getUpdatedLocation(mLocationRequest).subscribe(new Consumer<Location>() {
                     @Override
                     public void accept(Location location) throws Exception {
-                        synchronized (ubication){
-                            ubication = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(mUser.getDisplayName());
-                        }
+                        //synchronized (ubication){
+                            if(ubication==null){
+                                ubication = new dbObservable(mUser, MapData.getInstance(), location);
+                            }else{
+                                ubication.updateObservable(location);
+                            }
+                        //}
                         updateListeners();
                     }
                 });
@@ -94,7 +99,7 @@ public class MapData{
         }
     }
 
-    public void unSuscribe(LocationUpdater client){
+    public void unSuscribe(LocationListener client){
         synchronized (listeners){
             listeners.remove(client);
             if(listeners.isEmpty() && subscription != null){
@@ -103,18 +108,29 @@ public class MapData{
         }
     }
 
+    private MarkerOptions observableMark(dbObservable source){
+        return new MarkerOptions().position(new LatLng(source.getLatitude(), source.getLongitude())).title(source.getDisplayName());
+    }
+
     private void updateListeners(){
         synchronized (listeners){
-                for(LocationUpdater listener: listeners){
+                for(LocationListener listener: listeners){
                     synchronized (ubication){
-                        listener.updateLocation(ubication, markers, route);
+                        listener.updateLocation(observableMark(ubication), markers, route);
                     }
                 }
         }
     }
 
-    public void setRoute(Ruta route){
+    public void setRoute(Route route){
         this.route = route;
+        updateListeners();
+    }
+
+    @Override
+    public void updateObservable(dbObservable observable) {
+        markers.remove(observable.oldMarker);
+        MarkerOptions newMarker = new MarkerOptions().position(new LatLng(observable.getLatitude(), observable.getLongitude())).title(observable.getDisplayName());
         updateListeners();
     }
 }
